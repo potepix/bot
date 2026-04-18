@@ -28,12 +28,12 @@ Você compartilhou um token de bot Discord **em texto plano**! Este foi **INVALI
 - Cole o token copiado após o `=`:
 
 ```env
-DISCORD_TOKEN=MTQ5NDgxMjUwMDQzOTQ3MDI4MQ.GsJWDo.O0Ru1W0sHs59hf_45NoFZBzakf9kG_7dUQI4N8
+DISCORD_TOKEN=seu_token_aqui
 ```
 
 exemplo real (não use este!):
 ```env
-DISCORD_TOKEN=MjE2NDkwMjU1NjU4OTcyMjI0.CHjZ3g.wHJo1qoD85Ud7_Q6dQaOK8Fw4v4
+DISCORD_TOKEN=seu_token_aqui
 ```
 
 - Salve o arquivo

@@ -70,7 +70,7 @@
 
 **Exemplo:**
 ```env
-DISCORD_TOKEN=MjE2NDkwMjU1NjU4OTcyMjI0.CHjZ3g.wHJo1qoD85Ud7_Q6dQaOK8Fw4v4
+DISCORD_TOKEN=seu_token_aqui
 ```
 
 ### PASSO 3: Autorizar Bot no Servidor
