@@ -9,7 +9,10 @@ from src.database.models import db
 load_dotenv()
 
 # Configuração do bot
-PIX_KEY = os.getenv('PIX_KEY', 'chave_padrao')
+PIX_KEY = os.getenv('PIX_KEY')
+if not PIX_KEY:
+    PIX_KEY = 'chave_padrao'
+    print('⚠️ PIX_KEY não configurada. Use a variável de ambiente PIX_KEY no deploy.')
 intents = discord.Intents.default()
 intents.message_content = True
 

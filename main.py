@@ -8,6 +8,8 @@ import threading
 import sys
 from dotenv import load_dotenv
 
+from config import FLASK_HOST, FLASK_PORT
+
 # Carregar variáveis de ambiente
 load_dotenv()
 
@@ -54,7 +56,7 @@ if __name__ == '__main__':
     api_thread.start()
     
     print("\n✅ Sistema iniciado!")
-    print("📊 Dashboard: http://localhost:5000")
+    print(f"📊 Dashboard: http://{FLASK_HOST}:{FLASK_PORT}")
     print("🤖 Bot Discord: Conectado ao Discord")
     print("\nPressione Ctrl+C para parar\n")
     

@@ -22,6 +22,7 @@ Railway é a melhor opção para hospedar bots Discord. Aqui está como fazer:
 
 ```
 DISCORD_TOKEN=seu_token_aqui
+PIX_KEY=sua_chave_pix_aqui
 FLASK_HOST=0.0.0.0
 FLASK_PORT=8080
 FLASK_DEBUG=False

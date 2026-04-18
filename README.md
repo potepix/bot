@@ -64,6 +64,7 @@ pip install -r requirements.txt
 Abra o arquivo `.env` e preencha:
 ```env
 DISCORD_TOKEN=seu_token_aqui
+PIX_KEY=sua_chave_pix_aqui
 FLASK_HOST=0.0.0.0
 FLASK_PORT=5000
 FLASK_DEBUG=True
