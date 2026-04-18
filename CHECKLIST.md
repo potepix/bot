@@ -70,7 +70,7 @@
 
 **Exemplo:**
 ```env
-DISCORD_TOKEN=seu_token_aqui
+DISCORD_TOKEN=[COLE_SEU_TOKEN_AQUI]
 ```
 
 ### PASSO 3: Autorizar Bot no Servidor
