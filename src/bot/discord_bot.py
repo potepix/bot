@@ -9,6 +9,7 @@ from src.database.models import db
 load_dotenv()
 
 # Configuração do bot
+PIX_KEY = os.getenv('PIX_KEY', 'chave_padrao')
 intents = discord.Intents.default()
 intents.message_content = True
 
@@ -42,8 +43,8 @@ async def pix_command(interaction: discord.Interaction, valor: str):
         await interaction.followup.send("❌ O valor deve ser maior que 0!")
         return
     
-    # Gerar chave PIX
-    chave_pix = f"00020126360014br.gov.bcb.pix0136{str(uuid.uuid4())[:32]}52040000530398654061{valor_float:.2f}5802BR5913VENDEDOR6009SAO PAULO62410503***63041D3D"
+    # Gerar chave PIX (payload completo para QR)
+    chave_pix = f"00020126360014br.gov.bcb.pix01{len(PIX_KEY):02d}{PIX_KEY}52040000530398654061{valor_float:.2f}5802BR5913VENDEDOR6009SAO PAULO62410503***63041D3D"
     
     # Criar transação no banco de dados
     transaction_id = db.criar_transacao(
@@ -60,7 +61,7 @@ async def pix_command(interaction: discord.Interaction, valor: str):
         color=discord.Color.green()
     )
     embed.add_field(name="💰 Valor", value=f"R$ {valor_float:.2f}", inline=False)
-    embed.add_field(name="🔑 Chave PIX", value=f"`{chave_pix}`", inline=False)
+    embed.add_field(name="🔑 Chave PIX", value=f"`{PIX_KEY}`", inline=False)
     embed.add_field(name="📋 Instruções", value="Copie a chave acima e cole no seu banco para realizar o pagamento", inline=False)
     embed.set_footer(text=f"ID: {transaction_id}")
     
