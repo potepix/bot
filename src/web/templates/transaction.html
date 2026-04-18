@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhes - PIX</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>📊 Detalhes da Transação</h1>
+            <a href="/" class="btn-refresh">← Voltar</a>
+        </header>
+
+        <div style="background: white; padding: 30px; border-radius: 10px;">
+            <h2 style="margin-bottom: 20px;">ID: <code>{{ transacao.id }}</code></h2>
+            
+            <div style="margin-bottom: 30px;">
+                <h3 style="margin-bottom: 15px;">Informações da Transação:</h3>
+                
+                <p style="margin-bottom: 10px;">
+                    <strong>Valor:</strong> 
+                    <span style="font-size: 24px; color: #667eea; font-weight: bold;">
+                        R$ {{ "%.2f"|format_currency(transacao.valor) }}
+                    </span>
+                </p>
+                
+                <p style="margin-bottom: 10px;">
+                    <strong>Status:</strong> 
+                    <span class="status-badge status-{{ transacao.status }}">
+                        {% if transacao.status == 'pendente' %}
+                            🟡 Pendente
+                        {% elif transacao.status == 'processando' %}
+                            ⏳ Processando
+                        {% elif transacao.status == 'aprovada' %}
+                            ✅ Aprovada
+                        {% elif transacao.status == 'recusada' %}
+                            ❌ Recusada
+                        {% endif %}
+                    </span>
+                </p>
+                
+                <p style="margin-bottom: 10px;">
+                    <strong>Data de Criação:</strong> {{ transacao.data_criacao }}
+                </p>
+                
+                <p style="margin-bottom: 10px;">
+                    <strong>Última Atualização:</strong> {{ transacao.data_atualizacao }}
+                </p>
+            </div>
+
+            <div style="margin-bottom: 30px;">
+                <h3 style="margin-bottom: 15px;">Chave PIX:</h3>
+                <div style="background: #f0f0f0; padding: 15px; border-radius: 5px; word-break: break-all; font-family: monospace; font-size: 12px; cursor: pointer;" onclick="copiarChave()">
+                    {{ transacao.chave_pix }}
+                </div>
+                <button onclick="copiarChave()" style="margin-top: 10px; padding: 10px 20px; background: #667eea; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                    📋 Copiar Chave
+                </button>
+            </div>
+
+            {% if transacao.motivo_rejeicao %}
+            <div style="margin-bottom: 30px; background: #f8f8f8; padding: 15px; border-radius: 5px;">
+                <h3 style="margin-bottom: 10px; color: #d9534f;">Motivo da Rejeição:</h3>
+                <p style="color: #666;">{{ transacao.motivo_rejeicao }}</p>
+            </div>
+            {% endif %}
+
+            <div>
+                <h3 style="margin-bottom: 15px;">Ações:</h3>
+                {% if transacao.status == 'pendente' %}
+                    <button onclick="processarTransacao('{{ transacao.id }}')" style="margin-right: 10px; padding: 10px 20px; background: #4facfe; color: white; border: none; border-radius: 5px; cursor: pointer;">⏳ Processar</button>
+                    <button onclick="aprovarTransacao('{{ transacao.id }}')" style="margin-right: 10px; padding: 10px 20px; background: #43e97b; color: white; border: none; border-radius: 5px; cursor: pointer;">✅ Aprovar</button>
+                    <button onclick="recusarTransacao('{{ transacao.id }}')" style="padding: 10px 20px; background: #fa709a; color: white; border: none; border-radius: 5px; cursor: pointer;">❌ Recusar</button>
+                {% elif transacao.status == 'processando' %}
+                    <button onclick="aprovarTransacao('{{ transacao.id }}')" style="margin-right: 10px; padding: 10px 20px; background: #43e97b; color: white; border: none; border-radius: 5px; cursor: pointer;">✅ Aprovar</button>
+                    <button onclick="recusarTransacao('{{ transacao.id }}')" style="padding: 10px 20px; background: #fa709a; color: white; border: none; border-radius: 5px; cursor: pointer;">❌ Recusar</button>
+                {% else %}
+                    <p style="color: #999;">Nenhuma ação disponível para este status</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function copiarChave() {
+            const chave = '{{ transacao.chave_pix }}';
+            navigator.clipboard.writeText(chave).then(() => {
+                alert('✅ Chave PIX copiada com sucesso!');
+            }).catch(() => {
+                alert('❌ Erro ao copiar a chave');
+            });
+        }
+
+        function processarTransacao(id) {
+            if (!confirm('Marcar como em processamento?')) return;
+            fetch(`/api/transacao/${id}/processar`, { method: 'POST' })
+                .then(res => res.ok ? location.reload() : alert('Erro'))
+                .catch(err => alert('Erro: ' + err));
+        }
+
+        function aprovarTransacao(id) {
+            if (!confirm('Tem certeza que deseja aprovar esta transação?')) return;
+            fetch(`/api/transacao/${id}/aprovar`, { method: 'POST' })
+                .then(res => res.ok ? location.reload() : alert('Erro'))
+                .catch(err => alert('Erro: ' + err));
+        }
+
+        function recusarTransacao(id) {
+            const motivo = prompt('Digite o motivo da rejeição:');
+            if (motivo === null) return;
+            if (motivo.trim() === '') {
+                alert('❌ Por favor, digite um motivo');
+                return;
+            }
+            fetch(`/api/transacao/${id}/recusar`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ motivo: motivo })
+            })
+            .then(res => res.ok ? location.reload() : alert('Erro'))
+            .catch(err => alert('Erro: ' + err));
+        }
+    </script>
+</body>
+</html>

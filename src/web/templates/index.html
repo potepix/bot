@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💰 Dashboard de Pagamentos PIX</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1>💰 Gerenciador de Pagamentos PIX</h1>
+            <button class="btn-refresh" onclick="carregarDados()">🔄 Atualizar</button>
+        </header>
+
+        <!-- Estatísticas -->
+        <div class="stats-container">
+            <div class="stat-card total">
+                <h3>Total de Transações</h3>
+                <p id="total-transacoes" class="stat-number">0</p>
+            </div>
+            <div class="stat-card pendente">
+                <h3>Pendentes</h3>
+                <p id="pendentes-count" class="stat-number">0</p>
+            </div>
+            <div class="stat-card processando">
+                <h3>Processando</h3>
+                <p id="processando-count" class="stat-number">0</p>
+            </div>
+            <div class="stat-card aprovada">
+                <h3>Aprovadas</h3>
+                <p id="aprovadas-count" class="stat-number">0</p>
+            </div>
+            <div class="stat-card recusada">
+                <h3>Recusadas</h3>
+                <p id="recusadas-count" class="stat-number">0</p>
+            </div>
+            <div class="stat-card valor-total">
+                <h3>Valor Total</h3>
+                <p id="valor-total" class="stat-number">R$ 0,00</p>
+            </div>
+        </div>
+
+        <!-- Filtros -->
+        <div class="filter-container">
+            <button class="filter-btn active" onclick="filtrar('todas')">Todas</button>
+            <button class="filter-btn" onclick="filtrar('pendente')">🟡 Pendentes</button>
+            <button class="filter-btn" onclick="filtrar('processando')">⏳ Processando</button>
+            <button class="filter-btn" onclick="filtrar('aprovada')">✅ Aprovadas</button>
+            <button class="filter-btn" onclick="filtrar('recusada')">❌ Recusadas</button>
+        </div>
+
+        <!-- Tabela de Transações -->
+        <div class="table-container">
+            <table class="transactions-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Valor</th>
+                        <th>Status</th>
+                        <th>Data</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="transactions-tbody">
+                    <tr>
+                        <td colspan="5" class="loading">Carregando...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Modal para detalhes -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="fecharModal()">&times;</span>
+            <div id="modal-body">
+                <!-- Conteúdo será inserido aqui -->
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
